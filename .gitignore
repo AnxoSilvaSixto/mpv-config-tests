@@ -1,0 +1,6 @@
+# Real-world cuts stay local (sourced from commercial releases; re-cut with
+# make-test-clips.ps1). Synthetic clips + everything else is committed.
+clips/real/
+bench/shots/
+shader-stage/
+*.log
