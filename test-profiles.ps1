@@ -1,7 +1,7 @@
 <#
 End-to-end verification: Colorspace-BT709 auto-profile (SDR) + Alt+h hdr-toggle (HDR).
-Run: powershell -NoProfile -ExecutionPolicy Bypass -File tests/test-profiles.ps1
-Repo root is derived from this script's location (portable). Needs tests/clips/*.mp4
+Run: powershell -NoProfile -ExecutionPolicy Bypass -File test-profiles.ps1
+Repo root is derived from this script's location (portable). Needs clips/*.mp4
 from make-test-clips.ps1. Exit 0 = all checks pass.
 #>
 $ErrorActionPreference = 'Stop'

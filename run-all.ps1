@@ -1,5 +1,5 @@
 <#
-Master runner: audit + every tests/test-*.ps1 suite, linear on a single screen.
+Master runner: audit + every test-*.ps1 suite, linear on a single screen.
 Presentation takes after cargo-pretty: a live view with a Running section
 (spinner + per-suite timer), a Done (n/N) section with checkmarks, and a
 pinned bottom bar with overall progress + elapsed. Falls back to plain
@@ -10,7 +10,7 @@ in Windows PowerShell 5.1 before, so color/markers stay in the ASCII set.
   still appear where a suite needs one (test-seek is timing-sensitive and
   keeps its fullscreen window by design).
 - Exit code = number of failing suites (0 = everything green).
-Run: powershell -NoProfile -ExecutionPolicy Bypass -File tests/run-all.ps1
+Run: powershell -NoProfile -ExecutionPolicy Bypass -File run-all.ps1
 #>
 $ErrorActionPreference = 'Continue'
 $live = -not [Console]::IsOutputRedirected
