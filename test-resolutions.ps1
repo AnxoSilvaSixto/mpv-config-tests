@@ -55,7 +55,7 @@ $ladder = @(
     @{ Clip = 'res720.mp4';  Profile = 'Res-720p-Clean2x'; Has = 'ArtCNN_C4F32.glsl' },
     @{ Clip = 'res1000.mp4'; Profile = 'Res-Fractional';  Has = 'ravu-zoom-ar-r4.hook' },
     @{ Clip = 'res1400.mp4'; Profile = 'Res-NearNative';  Has = 'CfL_Prediction.glsl'; HasNot = 'ravu-zoom-ar-r4.hook' },
-    @{ Clip = 'res2160.mp4'; Profile = 'Res-Downscale';   Dscale = 'ewa_lanczos' }
+    @{ Clip = 'res2160.mp4'; Profile = 'Res-Downscale';   Dscale = 'mitchell' }
 )
 foreach ($r in $ladder) {
     $log = PlayLog $r.Clip

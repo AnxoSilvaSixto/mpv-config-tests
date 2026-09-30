@@ -1,7 +1,7 @@
 <#
 Keybinding round-trip via IPC keypress on a looped SDR clip:
 Alt+d (deband cycle), Alt+n / Alt+Shift+n (nlmeans on/off),
-Alt+t (tone-mapping cycle), Alt+g (classicjazz deband tuning).
+Alt+t (tone-mapping cycle), Alt+q (MaxQuality toggle).
 Exit 0 = all checks pass.
 #>
 $ErrorActionPreference = 'Stop'
@@ -62,9 +62,11 @@ try {
     $t3 = Get 'tone-mapping'
     Check 'Alt+t cycles tone-mapping' (($t1 -ne $t2) -and ($t2 -ne $t3))
 
-    Key 'Alt+g' | Out-Null; Start-Sleep -Milliseconds 500
-    $it = Get 'deband-iterations'
-    Check 'Alt+g sets classicjazz tuning (iterations=2)' ($it -match '"data":2')
+    Key 'Alt+q' | Out-Null; Start-Sleep -Milliseconds 500
+    $mq1 = Get 'user-data/maxq'
+    Key 'Alt+q' | Out-Null; Start-Sleep -Milliseconds 500
+    $mq2 = Get 'user-data/maxq'
+    Check 'Alt+q toggles MaxQuality (yes -> no)' (($mq1 -match '"data":"yes"') -and ($mq2 -match '"data":"no"'))
     $w.WriteLine('{ "command": ["quit"] }')
     $pipe.Close()
 } finally {

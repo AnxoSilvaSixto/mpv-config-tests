@@ -61,6 +61,7 @@ Check 'pal log clean' (-not ($script:lastFull -match '\[fatal\]|\[error\]|lua er
 $log = PlayLog 'gray.mkv'
 Check 'gray clip applies gray profile' ($log -match 'Applying auto profile: gray')
 $dels = @('CfL_Prediction', 'ArtCNN_C4F32', 'ravu-zoom-ar-r4', 'SSimSuperRes', 'SSimDownscaler') | Where-Object { $log -match "glsl-shaders-del.*$_" }
-Check 'gray removes all chroma-reconstruction shaders (5 dels)' (@($dels).Count -eq 5)
+Check 'gray removes chroma shader only (CfL del, luma upscalers kept)' ((@($dels).Count -eq 1) -and ($log -match 'glsl-shaders-del.*CfL_Prediction'))
+Check 'gray uses faithful dscale=hermite' ($log -match "Setting option 'dscale' = 'hermite'")
 Check 'gray log clean' (-not ($script:lastFull -match '\[fatal\]|\[error\]|lua error'))
 exit $fail
