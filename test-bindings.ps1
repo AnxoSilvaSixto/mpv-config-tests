@@ -59,8 +59,10 @@ try {
 
     $t1 = Get 'tone-mapping'; Key 'Alt+t' | Out-Null; Start-Sleep -Milliseconds 500
     $t2 = Get 'tone-mapping'; Key 'Alt+t' | Out-Null; Start-Sleep -Milliseconds 500
-    $t3 = Get 'tone-mapping'
+    $t3 = Get 'tone-mapping'; Key 'Alt+t' | Out-Null; Start-Sleep -Milliseconds 500
+    $t4 = Get 'tone-mapping'
     Check 'Alt+t cycles tone-mapping' (($t1 -ne $t2) -and ($t2 -ne $t3))
+    Check 'Alt+t returns to clip after 3 presses' (($t4 -eq $t1) -and ($t4 -match '"data":"clip"'))
 
     Key 'Alt+q' | Out-Null; Start-Sleep -Milliseconds 500
     $mq1 = Get 'user-data/maxq'

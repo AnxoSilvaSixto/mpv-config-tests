@@ -62,6 +62,9 @@ try {
     $pipe.Connect(15000)
     $w = New-Object System.IO.StreamWriter($pipe); $w.AutoFlush = $true
     $r = New-Object System.IO.StreamReader($pipe)
+    # Let file load and auto profiles (bt.2100-pq etc.) settle before Alt+h;
+    # otherwise profiles overwrite the toggle right after it is applied.
+    Start-Sleep -Milliseconds 2500
     function Send($json) {
         $w.WriteLine($json)
         $deadline = (Get-Date).AddSeconds(10)
@@ -84,7 +87,7 @@ try {
     if (-not $proc.HasExited) { $proc.Kill() }
 }
 $hdrLogText = Get-Content $hdrLog -Raw
-Check 'HDR log sets tone-mapping=spline' ($hdrLogText -match 'Set property: tone-mapping="spline"')
+Check 'HDR log sets tone-mapping=spline' ($hdrLogText -match 'Set property: (file-local-options/)?tone-mapping="spline"')
 Check 'HDR log has no unknown script-binding' (-not ($hdrLogText -match 'unknown script-binding'))
 Check 'HDR log has no fatal/error/lua lines' (-not ($hdrLogText -match '\[fatal\]|\[error\]|lua error'))
 exit $fail

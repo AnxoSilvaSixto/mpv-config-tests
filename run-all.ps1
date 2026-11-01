@@ -79,7 +79,7 @@ $clips = Join-Path $PSScriptRoot 'clips'
 if (-not ((Test-Path (Join-Path $clips 'sdr709.mp4')) -and (Test-Path (Join-Path $clips 'sdr20.mp4')) -and (Test-Path (Join-Path $clips 'sdr70.mp4')) -and (Test-Path (Join-Path $clips 'gray.mkv')) -and (Test-Path (Join-Path $clips 'duaudio.mkv')))) {
     $steps += @{ Name = 'make-test-clips'; File = (Join-Path $PSScriptRoot 'make-test-clips.ps1'); Args = '' }
 }
-foreach ($t in @('test-profiles.ps1', 'test-resolutions.ps1', 'test-colorspaces.ps1', 'test-hdrtoys.ps1', 'test-bindings.ps1', 'test-tracks.ps1', 'test-seek.ps1', 'test-session.ps1', 'test-config.ps1', 'test-realworld.ps1')) {
+foreach ($t in @('test-profiles.ps1', 'test-resolutions.ps1', 'test-shaderchain.ps1', 'test-colorspaces.ps1', 'test-hdrtoys.ps1', 'test-bindings.ps1', 'test-tracks.ps1', 'test-seek.ps1', 'test-session.ps1', 'test-config.ps1', 'test-realworld.ps1')) {
     $steps += @{ Name = $t; File = (Join-Path $PSScriptRoot $t); Args = '' }
 }
 # Perf smoke: bench-shaders on the real clips, stock preset only (informational;

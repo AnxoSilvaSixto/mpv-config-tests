@@ -1,17 +1,12 @@
 <#
-Session behavior WITHOUT seeking (see KNOWN FIGHT below):
+Session behavior WITHOUT seeking:
 - [ending] (last 60s of a file): sdr20.mp4 (20s, always in-window) must read
   save-position-on-quit=false shortly after load.
 - Out-of-window: sdr70.mp4 reads true early, false once time-remaining < 60s.
 - auto-save-state persists watch_later entries when quitting mid-file.
+- save-position-on-quit is owned by [ending]/mpv.conf only; the script no longer
+  writes it, so EOF/seek edges cannot re-enable saving inside the window.
 Exit 0 = all checks pass.
-
-KNOWN FIGHT (config-level, found by this test, not a test bug):
-auto-save-state.lua forces save-position-on-quit=yes at init (line 11) and on
-every eof-reached=false edge (line 67). Seeking pulses eof-reached, so any seek
-(or track change / EOF restart) after [ending] applied flips the value back to
-yes until the profile re-applies. Quitting in the last 60s right after such an
-edge still saves position. [ending] and the script both own this option.
 #>
 $ErrorActionPreference = 'Stop'
 $root = if ($env:MPV_ROOT) { $env:MPV_ROOT } else { 'C:/mpv' }
@@ -22,9 +17,16 @@ $fail = 0
 function Check($name, $cond) {
     if ($cond) { Write-Output "PASS: $name" } else { Write-Output "FAIL: $name"; $script:fail++ }
 }
+function Hash($path) {
+    # Get-FileHash is not available in this Windows PowerShell 5.1 environment.
+    $md5 = [System.Security.Cryptography.MD5]::Create()
+    try {
+        return ([BitConverter]::ToString($md5.ComputeHash([System.IO.File]::ReadAllBytes($path))) -replace '-', '')
+    } finally { $md5.Dispose() }
+}
 function Snap($dir) {
     $h = @{}
-    Get-ChildItem $dir -ErrorAction SilentlyContinue | ForEach-Object { $h[$_.Name] = (Get-FileHash $_.FullName -Algorithm MD5).Hash }
+    Get-ChildItem $dir -ErrorAction SilentlyContinue | ForEach-Object { $h[$_.Name] = (Hash $_.FullName) }
     return $h
 }
 function Watch($clip, $steps) {

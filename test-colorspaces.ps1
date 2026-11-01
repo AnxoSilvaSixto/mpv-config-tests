@@ -1,5 +1,6 @@
 <#
-Colorspace profiles: NTSC / PAL / gray must apply with the right target-prim.
+Colorspace profiles: NTSC / PAL / gray must apply with the right target-trc
+and must not override display primaries with source primaries.
 Needs tests/clips/{ntsc,pal}.mp4 and gray.mkv (FFV1) from make-test-clips.ps1.
 Exit 0 = all checks pass.
 #>
@@ -52,11 +53,13 @@ function PlayLog($clip, $quitAtSec = 3) {
 }
 $log = PlayLog 'ntsc.mp4'
 Check 'NTSC applies Colorspace-NTSC' ($log -match 'Applying auto profile: Colorspace-NTSC')
-Check 'NTSC target-prim=bt.601-525' ($log -match "Setting option 'target-prim' = 'bt.601-525'")
+Check 'NTSC target-trc=bt.1886' ($log -match "Setting option 'target-trc' = 'bt.1886'")
+Check 'NTSC does not force display primaries' (-not ($log -match "Setting option 'target-prim' = 'bt.601-525'"))
 Check 'ntsc log clean' (-not ($script:lastFull -match '\[fatal\]|\[error\]|lua error'))
 $log = PlayLog 'pal.mp4'
 Check 'PAL applies Colorspace-PAL' ($log -match 'Applying auto profile: Colorspace-PAL')
-Check 'PAL target-prim=bt.601-625' ($log -match "Setting option 'target-prim' = 'bt.601-625'")
+Check 'PAL target-trc=bt.1886' ($log -match "Setting option 'target-trc' = 'bt.1886'")
+Check 'PAL does not force display primaries' (-not ($log -match "Setting option 'target-prim' = 'bt.601-625'"))
 Check 'pal log clean' (-not ($script:lastFull -match '\[fatal\]|\[error\]|lua error'))
 $log = PlayLog 'gray.mkv'
 Check 'gray clip applies gray profile' ($log -match 'Applying auto profile: gray')
